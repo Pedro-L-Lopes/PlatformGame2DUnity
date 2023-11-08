@@ -8,7 +8,8 @@ public class Player : MonoBehaviour
     public float jumpForce;
     public int life;
     public Rigidbody2D rig;
-    
+    public Animator anim;
+
 
     private Vector2 direction;
     public bool isGrounded;
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour
     {
         direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Jump();
+        PlayAmim();
     }
 
     private void FixedUpdate()
@@ -38,6 +40,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
+            anim.SetInteger("transition", 2);
             rig.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             isGrounded = false;
         }
@@ -46,6 +49,35 @@ public class Player : MonoBehaviour
     void Death()
     {
 
+    }
+
+    void PlayAmim()
+    {
+        if (direction.x > 0)
+        {
+            if (isGrounded)
+            {
+                anim.SetInteger("transition", 1);
+            }
+            transform.eulerAngles = new Vector2(0, 0);
+        }
+
+        if (direction.x < 0)
+        {
+            if (isGrounded)
+            {
+                anim.SetInteger("transition", 1);
+            }
+            transform.eulerAngles = new Vector2(0, 180);
+        }
+
+        if (direction.x == 0)
+        {
+            if (isGrounded)
+            {
+                anim.SetInteger("transition", 0);
+            }
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
