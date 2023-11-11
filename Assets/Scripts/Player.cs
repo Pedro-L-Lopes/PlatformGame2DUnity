@@ -9,10 +9,12 @@ public class Player : MonoBehaviour
     public int life;
     public Rigidbody2D rig;
     public Animator anim;
+    public SpriteRenderer sprite;
 
 
     private Vector2 direction;
-    public bool isGrounded;
+    private bool isGrounded;
+    private bool recovery;
 
     void Start()
     {
@@ -78,6 +80,29 @@ public class Player : MonoBehaviour
                 anim.SetInteger("transition", 0);
             }
         }
+    }
+
+    public void Hit()
+    {
+
+        if (recovery == false)
+        {
+            StartCoroutine(Flick());
+        }
+    }
+
+    IEnumerator Flick()
+    {
+        recovery = true;
+        sprite.color = new Color(1, 1, 1, 0);
+        yield return new WaitForSeconds(0.2f);
+        sprite.color = new Color(1, 1, 1, 1);
+        yield return new WaitForSeconds(0.2f);
+        sprite.color = new Color(1, 1, 1, 0);
+        yield return new WaitForSeconds(0.2f);
+        sprite.color = new Color(1, 1, 1, 1);
+        life -= 1;
+        recovery = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
