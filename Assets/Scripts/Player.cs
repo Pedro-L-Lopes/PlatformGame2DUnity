@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class Player : MonoBehaviour
@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI appleText;
     public TextMeshProUGUI lifeText;
+    public GameObject gameOver;
 
     private Vector2 direction;
     private bool isGrounded;
@@ -27,6 +28,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         lifeText.text = life.ToString();
+        Time.timeScale = 1;
     }
 
     void Update()
@@ -58,7 +60,11 @@ public class Player : MonoBehaviour
 
     void Death()
     {
-
+        if (life <= 0)
+        {
+            gameOver.SetActive(true);
+            Time.timeScale = 0;
+        }
     }
 
     void PlayAmim()
@@ -103,6 +109,7 @@ public class Player : MonoBehaviour
     {
         recovery = true;
         life -= 1;
+        Death();
         lifeText.text = life.ToString();
         sprite.color = new Color(1, 1, 1, 0);
         yield return new WaitForSeconds(0.2f);
@@ -118,6 +125,11 @@ public class Player : MonoBehaviour
     {
         apple++;
         appleText.text = apple.ToString();
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
