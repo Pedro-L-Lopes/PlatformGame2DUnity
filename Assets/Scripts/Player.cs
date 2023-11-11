@@ -1,16 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
+    [Header("Attributes")]
     public float speed;
     public float jumpForce;
     public int life;
+    public int apple;
+
+    [Header("Components")]
     public Rigidbody2D rig;
     public Animator anim;
     public SpriteRenderer sprite;
 
+    [Header("UI")]
+    public TextMeshProUGUI appleText;
+    public TextMeshProUGUI lifeText;
 
     private Vector2 direction;
     private bool isGrounded;
@@ -18,7 +26,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-
+        lifeText.text = life.ToString();
     }
 
     void Update()
@@ -94,15 +102,22 @@ public class Player : MonoBehaviour
     IEnumerator Flick()
     {
         recovery = true;
-        sprite.color = new Color(1, 1, 1, 0);
-        yield return new WaitForSeconds(0.2f);
-        sprite.color = new Color(1, 1, 1, 1);
-        yield return new WaitForSeconds(0.2f);
-        sprite.color = new Color(1, 1, 1, 0);
-        yield return new WaitForSeconds(0.2f);
-        sprite.color = new Color(1, 1, 1, 1);
         life -= 1;
+        lifeText.text = life.ToString();
+        sprite.color = new Color(1, 1, 1, 0);
+        yield return new WaitForSeconds(0.2f);
+        sprite.color = new Color(1, 1, 1, 1);
+        yield return new WaitForSeconds(0.2f);
+        sprite.color = new Color(1, 1, 1, 0);
+        yield return new WaitForSeconds(0.2f);
+        sprite.color = new Color(1, 1, 1, 1);
         recovery = false;
+    }
+
+    public void IncreaseScore()
+    {
+        apple++;
+        appleText.text = apple.ToString();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
