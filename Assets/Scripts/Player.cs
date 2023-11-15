@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     {
         lifeText.text = life.ToString();
         Time.timeScale = 1;
+        DontDestroyOnLoad(gameObject);
     }
 
     void Update()
